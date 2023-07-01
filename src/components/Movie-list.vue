@@ -1,23 +1,28 @@
 <template lang="">
-  <ul   class='movie-list list-group'>
-    <MovieListItem v-for="movie in movies"  :movie="movie"/>
-    
+  <ul class="movie-list list-group">
+    <MovieListItem
+      v-for="movie in movies"
+      :movie="movie"
+      :key="movie.id"
+      @onToggle="$emit('onToggle', $event)"
+      @onDelete="$emit('onDelete', movie.id)"
+    />
   </ul>
 </template>
 
 <script>
-import MovieListItem from './Movie-list-item.vue';
+import MovieListItem from "./Movie-list-item.vue";
 export default {
   components: {
-    MovieListItem
+    MovieListItem,
   },
   props: {
     movies: {
       type: Array,
-      required: true
-    }
-  }
-}
+      required: true,
+    },
+  },
+};
 </script>
 
 <style scoped>

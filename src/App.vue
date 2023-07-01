@@ -1,49 +1,33 @@
 <template>
   <div class="app font-monospace">
     <div class="content">
-      <AppInfo :allMovies="movies.length" :favouriteMovies="movies.filter(c => c.favourite).length" />
-      <div class='search-panel'>
-        <SearchPanel />
-        <AppFilter />
+      <AppInfo
+        :allMovies="movies.length"
+        :favouriteMovies="movies.filter((c) => c.favourite).length"
+      />
+      <div class="search-panel">
+        <SearchPanel :updateTermHandler="updateTermHandler" />
+        <AppFilter
+          :updateFilterHandler="updateFilterHandler"
+          :filterName="filter"
+        />
       </div>
-      <MovieList :movies="movies" />
-      <MovieForm />
+      <MovieList
+        :movies="onFilterHandler(onSearchHandler(movies, term), filter)"
+        @onToggle="onToggleHandler"
+        @onDelete="onDeleteHandler"
+      />
+      <MovieForm @createMovie="createMovie" />
     </div>
   </div>
 </template>
-data() {
-  return {
-    movies: [
-      {
-        id: 1,
-        title: 'The Shawshank Redemption',
-        year: 1994,
-        like: true,
-        favourite: true
-      },
-      {
-        id: 2,
-        title: 'The Godfather',
-        year: 1972,
-        like: false,
-        favourite: true
-      },
-      {
-        id: 3,
-        title: 'The Godfather: Part II',
-        year: 1974,
-        like: true,
-        favourite: false
-      }
-    ]
-  }
-},
+
 <script>
-import AppInfo from "./components/App-info.vue"
-import SearchPanel from "./components/SearchPanel.vue"
-import AppFilter from './components/App-filter.vue'
-import MovieList from './components/Movie-list.vue'
-import MovieForm from './components/Movie-form.vue'
+import AppInfo from "./components/App-info.vue";
+import SearchPanel from "./components/SearchPanel.vue";
+import AppFilter from "./components/App-filter.vue";
+import MovieList from "./components/Movie-list.vue";
+import MovieForm from "./components/Movie-form.vue";
 
 export default {
   components: {
@@ -51,36 +35,79 @@ export default {
     SearchPanel,
     AppFilter,
     MovieList,
-    MovieForm
+    MovieForm,
   },
   data() {
     return {
       movies: [
         {
           id: 1,
-          title: 'The Shawshank Redemption',
-          year: 1994,
+          title: "The Shawshank Redemption",
+          year: 800,
           like: true,
-          favourite: true
+          favourite: true,
         },
         {
           id: 2,
-          title: 'The Godfather',
-          year: 1972,
+          title: "The Godfather",
+          year: 411,
           like: false,
-          favourite: true
+          favourite: true,
         },
         {
           id: 3,
-          title: 'The Godfather: Part II',
-          year: 1974,
+          title: "The Godfather: Part II",
+          year: 501,
           like: true,
-          favourite: false
-        }
-      ]
-    }
+          favourite: false,
+        },
+      ],
+      term: "",
+      filter: "all",
+    };
   },
-}
+  methods: {
+    createMovie(item) {
+      this.movies.push(item);
+    },
+    onToggleHandler({ id, prop }) {
+      this.movies = this.movies.map((item) => {
+        if (item.id == id) {
+          return { ...item, [prop]: !item[prop] };
+        }
+        return item;
+      });
+    },
+    onDeleteHandler(id) {
+      this.movies = this.movies.filter((item) => item.id != id);
+    },
+    onSearchHandler(arr, term) {
+      if (term.length == 0) {
+        return arr;
+      }
+      return this.movies.filter(
+        (item) => item.title.toLowerCase().indexOf(term.toLowerCase()) > -1
+      );
+    },
+    onFilterHandler(arr, filter) {
+      switch (filter) {
+        case "popular":
+          return arr.filter((c) => c.like);
+        case "mostViewers":
+          return arr.filter((c) => c.year > 500);
+        default:
+          return arr;
+      }
+    },
+    updateFilterHandler(filter) {
+      this.filter = filter;
+    },
+
+    updateTermHandler(term) {
+      this.term = term;
+    },
+  },
+};
 </script>
 
 <style>

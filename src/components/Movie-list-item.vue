@@ -1,19 +1,27 @@
 <template lang="">
-  <li class='list-group-item d-flex justify-content-between' :class='[
-    {like: movie.like},{favorite: movie.favourite}
-  ]'>
-    <span class='list-group-item-label'>{{movie.title}}</span>
-    <input type="number" class='list-group-item-input' :value="movie.year">
-    <div class='d-flex justify-content-center align-items-center'>
-
-      <button type='button' class='btn-cookie btn-sm'>
-        <i class='fas fa-cookie'></i>
+  <li
+    class="list-group-item d-flex justify-content-between"
+    :class="[{ like: movie.like }, { favorite: movie.favourite }]"
+  >
+    <span
+      @click="$emit('onToggle', { id: movie.id, prop: 'like' })"
+      class="list-group-item-label"
+      >{{ movie.title }}</span
+    >
+    <input type="number" class="list-group-item-input" :value="movie.year" />
+    <div class="d-flex justify-content-center align-items-center">
+      <button
+        @click="$emit('onToggle', { id: movie.id, prop: 'favourite' })"
+        type="button"
+        class="btn-cookie btn-sm"
+      >
+        <i class="fas fa-cookie"></i>
       </button>
 
-      <button type='button' class='btn-trash btn-sm'>
-        <i class='fas fa-trash'></i>
+      <button @click="onDelete" type="button" class="btn-trash btn-sm">
+        <i class="fas fa-trash"></i>
       </button>
-      <i class='fas fa-star' ></i>
+      <i class="fas fa-star"></i>
     </div>
   </li>
 </template>
@@ -23,10 +31,15 @@ export default {
   props: {
     movie: {
       type: Object,
-      required: true
-    }
-  }
-}
+      required: true,
+    },
+  },
+  methods: {
+    onDelete() {
+      this.$emit("onDelete", this.movie.id);
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -65,7 +78,6 @@ export default {
 
 .list-group-item .btn-cookie {
   color: #e09f3e;
-
 }
 
 .list-group-item .btn-trash {

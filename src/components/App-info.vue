@@ -1,32 +1,27 @@
 <template>
-  <div class="app-info">
+  <Box class="app-info">
     <p class="fs-3 text-uppercase">Barcha kinolar soni: {{ allMovies }}</p>
-    <p class="fs-4 text-uppercase">Korilgan kinolar soni: {{ favouriteMovies }}</p>
-  </div>
+    <p class="fs-4 text-uppercase">
+      Korilgan kinolar soni: {{ favouriteMovies }}
+    </p>
+  </Box>
 </template>
 
 <script>
-
+import Box from "../ui-components/Box.vue";
 export default {
   props: {
     allMovies: {
       type: Number,
-      required: true
+      required: true,
     },
     favouriteMovies: {
       type: Number,
-      required: true
-    }
-  }
-}
+      required: true,
+    },
+  },
+  components: { Box },
+};
 </script>
 
-<style scoped>
-.app-info {
-  margin-top: 2rem;
-  background-color: #fcfaf5;
-  padding: 1.5rem;
-  border-radius: 4px;
-  box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.15);
-}
-</style>
+<style scoped></style>
